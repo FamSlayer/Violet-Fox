@@ -17,14 +17,17 @@ public class Throw : MonoBehaviour
 
 
 
-    public float default_throw_distance = 20f;
-    float throw_distance;
+    public float default_throw_power;
+    public float default_throw_angle;
+    float throw_power;
+    float throw_angle;
 
 	// Use this for initialization
 	void Start ()
     {
         action_state = p_state.waiting;
-        throw_distance = default_throw_distance;
+        throw_power = default_throw_power;
+        throw_angle = default_throw_angle;
 
     }
 	
@@ -45,6 +48,8 @@ public class Throw : MonoBehaviour
         }
 
 
+        float mouse_y = Input.GetAxis("Mouse Y");
+        float scrollwheel = Input.GetAxis("Mouse ScrollWheel");
 
         if ( action_state == p_state.aiming )
         {   /*  1. Allow the mouse scrollwheel to be used to increase/decrease the distance the object will be sent
@@ -70,13 +75,13 @@ public class Throw : MonoBehaviour
             */
             
 
-            Vector3 launch_velocity = getThrowVelocity(held_item_, throw_distance);
+            Vector3 launch_velocity = getThrowVelocity(held_item_, throw_power);
             throwItem( held_item_, launch_velocity );
 
 
             held_item_ = null;
             action_state = p_state.waiting;
-            throw_distance = default_throw_distance;
+            throw_power = default_throw_power;
             
         }
 
@@ -88,9 +93,20 @@ public class Throw : MonoBehaviour
     {   /*  1. Instantiate a new gameobject based on whatever the selected item is
             2. Parent it to the player (so if the player rotates the object rotates too)
         */
+        
+
         GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        obj.transform.position = gameObject.transform.position + gameObject.transform.forward + gameObject.transform.up;
-        obj.transform.forward = gameObject.transform.forward;
+        obj.transform.position = gameObject.transform.position + gameObject.transform.forward + gameObject.transform.up; // fake position, we'll probably 
+
+        print(throw_angle);
+        float forward_x = gameObject.transform.forward.x * Mathf.Cos(throw_angle * Mathf.Deg2Rad);
+        float forward_z = gameObject.transform.forward.z * Mathf.Cos(throw_angle * Mathf.Deg2Rad);
+        float forward_y = Mathf.Sin(throw_angle * Mathf.Deg2Rad);
+        Vector3 forward = new Vector3(forward_x, forward_y, forward_z);
+        print("Forward: " + forward.ToString());
+
+        obj.transform.forward = Vector3.Normalize(forward);
+
         obj.transform.parent = gameObject.transform;
         obj.AddComponent<Rigidbody>();
         Rigidbody rb = obj.GetComponent<Rigidbody>();
@@ -141,8 +157,8 @@ public class Throw : MonoBehaviour
 
 
 
-
-        return gameObject.transform.forward * dist + gameObject.transform.up * dist/8f;
+        Rigidbody rb = obj.GetComponent<Rigidbody>();
+        return obj.transform.forward * throw_power / rb.mass ;
         //return new Vector3(10f,5f,0f);
     }
 
@@ -152,9 +168,7 @@ public class Throw : MonoBehaviour
         rb.useGravity = true;
         rb.detectCollisions = true;
         rb.velocity = init_velocity;
-
-
-        print(rb);
+        print(rb.velocity);
     }
 
 
