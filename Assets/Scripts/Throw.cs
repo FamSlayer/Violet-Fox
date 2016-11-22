@@ -4,32 +4,35 @@ using System.Collections.Generic;
 public class Throw : MonoBehaviour
 {
 
-    public enum p_state
+    enum p_state
     {
         waiting,
         aiming,
         throwing
     }
-    public p_state action_state;
-
-
+    p_state action_state;
+    
     public GameObject held_item_;
-    public LineRenderer throw_arc;
-
+    
     public float throw_arc_time_step;
     public float line_width;
     public float default_throw_power;
     public float default_throw_angle;
+    public float max_random_spin;
     float throw_power;
     float throw_angle;
 
-	// Use this for initialization
-	void Start ()
+
+    LineRenderer throw_arc;
+
+    // Use this for initialization
+    void Start ()
     {
         action_state = p_state.waiting;
         throw_power = default_throw_power;
         throw_angle = default_throw_angle;
-        throw_arc = new LineRenderer();
+        throw_arc = gameObject.AddComponent<LineRenderer>();
+        throw_arc.SetWidth(0f, .1f);
 
     }
 	
@@ -97,7 +100,7 @@ public class Throw : MonoBehaviour
     void holdObjectToThrow ( string item )
     {   //  1. Instantiate a new gameobject based on whatever the selected item is
         GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        obj.transform.position = gameObject.transform.position + gameObject.transform.forward + gameObject.transform.up; // fake position, we'll probably 
+        obj.transform.position = gameObject.transform.position + gameObject.transform.forward + gameObject.transform.right/2f + gameObject.transform.up/4f; // fake position, we'll probably 
 
         //  2. Make it face the right direction
         updateObjectFacing( obj, default_throw_angle );
@@ -112,6 +115,7 @@ public class Throw : MonoBehaviour
         rb.useGravity = false;
         rb.detectCollisions = false;
 
+        obj.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
         //  5. Set the new game object to the player's held_item_ member variable
         held_item_ = obj;
     }
@@ -133,61 +137,41 @@ public class Throw : MonoBehaviour
         float vx = vel.x;
         float vy = vel.y;
         float vz = vel.z;
-        print(" [ " + vx.ToString() + ", " + vy.ToString() + ", " + vz.ToString() + " ] ");
 
         float h = obj.transform.position.y;
         float x = obj.transform.position.x;
         float z = obj.transform.position.z;
         float h_prev = h;
-        //float x_prev = x;
-        //float z_prev = z;
 
         float t = 0;
         float dt = throw_arc_time_step;
 
-        //Mesh line = new Mesh();
-        int iterations = 0;
-
         List<Vector3> points = new List<Vector3>();
-        while ( h > 0  && iterations < 10 )
+        points.Add(obj.transform.position);
+        while ( h > 0 )
         {
             t += dt;
             h = getCurrentHeight(t, obj.transform.position.y, vy);
-            float dy = h - h_prev;
-
-            float dx = vx * dt;
-            float dz = vz * dt;
-            x += dx;
-            z += dz;
-
+            x += vx * dt;
+            z += vz * dt;
             points.Add(new Vector3(x, h, z));
-            //drawSegment(new Vector3(x, h, z), new Vector3(x - dx, h - dy, z - dz), line);
-            // OR
-            //drawSegment(new Vector3(x, h, z), new Vector3(x_prev, h_prev, z_prev));
-
-            //x_prev = x;
-            //z_prev = z;
 
             h_prev = h;
-
-
-            t += dt;
-            iterations++;
+            //print("H_pev: " + h_prev.ToString() + "\tH now: " + h.ToString());
         }
+
 
         Vector3[] positions = new Vector3[points.Count];
         for (int i = 0; i < points.Count; i++) positions[i] = points[i];
-        //throw_arc.SetPositions = positions;
+        throw_arc.SetVertexCount(positions.Length);
+        throw_arc.SetPositions(positions);
 
-        //print(" NOW we made a mesh... ");
-        //Graphics.DrawMeshNow(line, obj.transform.position, Quaternion.identity);
-        //Destroy(line);
     }
 
     float getCurrentHeight(float t, float h0, float v0)
     {
         float g = Physics.gravity.y;
-        return h0 + v0 * t - 1f / 2f * g * t * t;
+        return h0 + v0 * t + 1f / 2f * g * t * t;
     }
 
     void drawSegment( Vector3 start, Vector3 end, Mesh m)
@@ -279,6 +263,8 @@ public class Throw : MonoBehaviour
         rb.useGravity = true;
         rb.detectCollisions = true;
         rb.velocity = init_velocity;
+        float max = max_random_spin;
+        rb.AddTorque(new Vector3(Random.Range(-max, max), Random.Range(-max, max), Random.Range(-max, max)), ForceMode.Impulse);
         item.transform.parent = null;
         //print(rb.velocity);
     }
