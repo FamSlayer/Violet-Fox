@@ -16,13 +16,16 @@ public class Throw : MonoBehaviour
     
     public float throw_arc_time_step;
     public float line_width;
+    [Range (5,20)]
     public float default_throw_power;
+    [Range (0, 60)]
     public float default_throw_angle;
+    [Range(0, 5)]
     public float max_random_spin;
+
     float throw_power;
     float throw_angle;
-
-
+    
     LineRenderer throw_arc;
 
     // Use this for initialization
@@ -160,7 +163,7 @@ public class Throw : MonoBehaviour
             //print("H_pev: " + h_prev.ToString() + "\tH now: " + h.ToString());
         }
 
-
+        // convert the List<Vector3> into an Vector3[] array
         Vector3[] positions = new Vector3[points.Count];
         for (int i = 0; i < points.Count; i++) positions[i] = points[i];
         throw_arc.SetVertexCount(positions.Length);
@@ -173,69 +176,7 @@ public class Throw : MonoBehaviour
         float g = Physics.gravity.y;
         return h0 + v0 * t + 1f / 2f * g * t * t;
     }
-
-    void drawSegment( Vector3 start, Vector3 end, Mesh m)
-    {
-        int vlen = m.vertexCount;
-        int clen = m.colors.Length;
-        int tlen = m.triangles.Length;
-
-        //  1. Get vertices for the quad that is gonna be the line
-        Vector3[] quad = MakeQuad(start, end, line_width);
-
-        //  2. Add in the new quad
-        Vector3[] vs = m.vertices;
-        vs = resizeVertices(vs, quad.Length);
-        vs[vlen] = quad[0];
-        vs[vlen + 1] = quad[1];
-        vs[vlen + 2] = quad[2];
-        vs[vlen + 3] = quad[3];
-
-        //  3. Add some color in there
-        Color[] cs = m.colors;
-        cs = resizeColors(cs, quad.Length);
-        for (int i = 0; i < quad.Length; i++)
-        {
-            cs[clen + i] = Color.Lerp(Color.red, Color.green, quad[i].y);
-        }
-        
-        //  4. Add in the new triangles
-        int[] ts = m.triangles;
-        ts = resizeTriangles(ts, 6);
-        ts[tlen] = vlen;
-        ts[tlen + 1] = vlen + 1;
-        ts[tlen + 2] = vlen + 2;
-        ts[tlen + 3] = vlen + 1;
-        ts[tlen + 4] = vlen + 3;
-        ts[tlen + 5] = vlen + 2;
-
-        //  5. Update the changes back into the mesh
-        m.vertices = vs;
-        m.colors = cs;
-        m.triangles = ts;
-        m.RecalculateBounds();
-
-        //print("made a mesh: " + m.ToString());
-        //Graphics.DrawMeshNow(line, new Vector3(0, 0, 0), Quaternion.identity);
-    }
-
-    Vector3[] MakeQuad(Vector3 s, Vector3 e, float w)
-    {
-        w = w / 2;
-        Vector3[] q = new Vector3[4];
-
-        Vector3 n = Vector3.Cross(s, e);
-        Vector3 l = Vector3.Cross(n, e - s);
-        l.Normalize();
-
-        q[0] = transform.InverseTransformPoint(s + l * w);
-        q[1] = transform.InverseTransformPoint(s + l * -w);
-        q[2] = transform.InverseTransformPoint(e + l * w);
-        q[3] = transform.InverseTransformPoint(e + l * -w);
-
-        return q;
-    }
-
+    
     Color[] resizeColors(Color[] c, int ds)
     {
         Color[] new_c = new Color[c.Length + ds];
@@ -264,7 +205,8 @@ public class Throw : MonoBehaviour
         rb.detectCollisions = true;
         rb.velocity = init_velocity;
         float max = max_random_spin;
-        rb.AddTorque(new Vector3(Random.Range(-max, max), Random.Range(-max, max), Random.Range(-max, max)), ForceMode.Impulse);
+        Vector3 torque = new Vector3(Random.Range(-max, max), Random.Range(-max, max), Random.Range(-max, max));
+        rb.AddTorque(torque * init_velocity.magnitude, ForceMode.Impulse);
         item.transform.parent = null;
         //print(rb.velocity);
     }
