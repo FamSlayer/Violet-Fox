@@ -57,17 +57,21 @@ public class Throw : MonoBehaviour
         
 
         if ( action_state == p_state.aiming )
-        {   //  1. Get the inputs! (ScrollWheel and Mouse Y)
+        {
+            if (!throw_arc.isVisible)
+                throw_arc.enabled = true;
+
+            //  1. Get the inputs! (ScrollWheel and Mouse Y)
             float mouse_y = Input.GetAxis("Mouse Y");
             float scrollwheel = Input.GetAxis("Mouse ScrollWheel");
 
             //  2. Use ScrollWheel to increase/decrease the power
             throw_power += scrollwheel;
-            Mathf.Clamp(throw_power, 0f, 25f);
-
+            throw_power = Mathf.Clamp(throw_power, 3f, 25f);
+            
             //  3. Use mouse Y to increase/decrease the throw_angle
             throw_angle += mouse_y;
-            Mathf.Clamp(throw_angle, -45f, 90f);
+            throw_angle = Mathf.Clamp(throw_angle, -45f, 90f);
             updateObjectFacing( held_item_, throw_angle );
 
             //  4. Display the line that will show the object's movement
@@ -86,6 +90,7 @@ public class Throw : MonoBehaviour
             //  3. Set action_state back to waiting
             held_item_ = null;
             action_state = p_state.waiting;
+            throw_arc.enabled = false;
         }
         
     }
