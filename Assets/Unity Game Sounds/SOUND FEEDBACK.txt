@@ -1,0 +1,78 @@
+A man gasps_AOS01311
+	the man sounds shocked, and the man should really sound more confused, like, 
+	huh? what was that sound? (hopefully still a wordless sound though)
+	
+	-no, look for somethin else (see above)
+
+CRASH GLASS WINE DROP BREAK 02
+	I'm not sure how our glass will look, but I think this sound can work for the milk bottle
+	
+	-yes, for milk bottle and maybe 
+
+EFT EXT Breaking Plates
+	I like the second breaking sound, at about 0:05. Also like the one at 0:24 
+		(get both and we'll see which one matches the plate model and texture better)
+	
+	also, a sound for dragging/kicking the plate along the ground can be gotten from the
+		sliding sound at like 0:12, 0:42 (tiny plate piece), 
+		from like 30-36 there are sounds after the initial break of the plate
+			those sounds can cut and repeated to sound like kicking plate shards
+			
+	-edit
+		- 2 breaking sounds, described at top
+		- 3-5 different repeating selections for broken plate pieces sliding on the ground
+			~ test these by copying and pasting each sound after itself and try to make it so you cannot even tell the sound it being looped
+
+EFT EXT Small Glass Shatter 01
+	Wow there is so much after sound with the glass hitting wood after,
+		legit sounds like it's recorded on a pirate ship 
+		
+	-no
+	
+EFT EXT Small Glass Shatter 08
+	I don't like how there's two parts to the sound, it doesn't seem generic enough to
+		match throwing glasses at stone brick walls and stone tile floors
+		
+EFX INT Barefoot FS 01 A
+	Sounds like on wood, also there's a lot of crackling (no clean footsteps)
+	
+	-no
+	
+EFX INT Martha into darkness FS
+	I am pretty sure our floor is going to be stone tiles, and this is definitely on wood
+	(I think we changed it from wood -> stone on Wednesday when we looked at some sources)
+	
+	-no
+
+FOLEY PLASTIC BUCKET SMALL HIT SETTLE HOLLOW WOOD 01
+	the bucket it plastic and the floor is wood, so probably not
+	but there is this settling sound at like 0:01.5 or so that might be nice
+	
+	-probably not
+	
+FOLEY WATER DROP ON METAL 01
+	Definitely a UI sound, might be usable as a "you can't click or do that" sound
+	
+	-maybe
+	
+FOOTSTEP 104
+	Sounds like a man in boots, and I like it for our guard footsteps.
+		at 0:10-0:12 the footsteps are slow, maybe sample from there?
+		
+	-yes, guard footsteps
+	
+Rock drop small pebble single_BLASTWAVEFX_23001
+	Idk if we will have a pebble to put into the game, but this is perfect for it
+	
+	-keep just in case
+	
+Special effect hit break glass light bulb_BLASTWAVEFX_11282
+	This to me sounds more like a glass cup breaking than the one for the milk bottle
+	
+	There's the initial hit that's good, and add maybe the tail end of the tiny sliding glass
+		bits onto the end of it? Is it possible to make that sound ok? 
+		I don't like the reverberating sound or the middle of it
+	
+	This could just be good enough, maybe I'm just being too picky
+	
+	-yes, for glass cup
