@@ -149,7 +149,7 @@ public class Throw : MonoBehaviour
         float h = obj.transform.position.y;
         float x = obj.transform.position.x;
         float z = obj.transform.position.z;
-        float h_prev = h;
+        //float h_prev = h;
 
         float t = 0;
         float dt = throw_arc_time_step;
@@ -164,13 +164,21 @@ public class Throw : MonoBehaviour
             z += vz * dt;
             points.Add(new Vector3(x, h, z));
 
-            h_prev = h;
+            //h_prev = h;
             //print("H_pev: " + h_prev.ToString() + "\tH now: " + h.ToString());
         }
 
         // convert the List<Vector3> into an Vector3[] array
         Vector3[] positions = new Vector3[points.Count];
-        for (int i = 0; i < points.Count; i++) positions[i] = points[i];
+
+        /*  ok well the difference between my function to convert it to an array and the .ToArray() function 
+         *      is that 
+         */
+
+        //for (int i = 0; i < points.Count; i++) positions[i] = points[i];
+        positions = points.ToArray();
+
+
         throw_arc.SetVertexCount(positions.Length);
         throw_arc.SetPositions(positions);
 
