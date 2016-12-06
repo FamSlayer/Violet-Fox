@@ -7,6 +7,8 @@ public class MoveScript : MonoBehaviour {
     public float speedH = 2.0f;
     public float speedV = 2.0f;
     public float jump_speed = 20;
+    public float max_pitch;
+    public float min_pitch;
     [Range(0,1)]
     public float camera_slow_when_firing = 0.5f;
     //private Vector3 moveDirection = Vector3.zero;
@@ -93,7 +95,8 @@ public class MoveScript : MonoBehaviour {
             pitch -= speedV * Input.GetAxis("Mouse Y") * camera_slow_when_firing;
             yaw += speedH * Input.GetAxis("Mouse X") * camera_slow_when_firing;
         }
-            
+
+        pitch = Mathf.Clamp(pitch, min_pitch, max_pitch);
 
         transform.eulerAngles = new Vector3(pitch, yaw, 0.0f);
 

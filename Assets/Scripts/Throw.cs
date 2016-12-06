@@ -36,6 +36,7 @@ public class Throw : MonoBehaviour
         throw_angle = Vector3.Angle(transform.forward, new Vector3(transform.forward.x, 0, transform.forward.z));
         throw_arc = gameObject.AddComponent<LineRenderer>();
         throw_arc.SetWidth(0f, .1f);
+        throw_arc.enabled = false;
 
          
     }
@@ -46,11 +47,12 @@ public class Throw : MonoBehaviour
         offset = gameObject.transform.position + gameObject.transform.forward + gameObject.transform.right / 2f + gameObject.transform.up / 4f; // fake position, we'll change this ???
         if (Input.GetMouseButtonDown(0))
         {
-            holdObjectToThrow("garbage boy");
+            GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            holdObjectToThrow(obj);
             throw_power = default_throw_power;
             throw_angle = Vector3.Angle(transform.forward, new Vector3(transform.forward.x, 0, transform.forward.z));
             if (transform.forward.y < 0)
-                throw_angle -= 90;
+                throw_angle *= -1;
             action_state = p_state.aiming;
         }
 
@@ -109,9 +111,8 @@ public class Throw : MonoBehaviour
             4. Turn off gravity and stuff
             5. Set the new game object to the player's held_item_ member variable
     */
-    void holdObjectToThrow ( string item )
-    {   //  1. Instantiate a new gameobject based on whatever the selected item is
-        GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
+    void holdObjectToThrow ( GameObject obj )
+    {   //  1. Move the GameObject obj to the correct position
         obj.transform.position = offset;
 
         //  2. Make it face the right direction
@@ -234,6 +235,26 @@ public class Throw : MonoBehaviour
     {
         Rigidbody rb = obj.GetComponent<Rigidbody>();
         return obj.transform.forward * power / rb.mass;
+    }
+
+
+    // this is the function called by the UI to change the held item
+    public void changeObjectHolding ( GameObject obj )
+    {
+        if(held_item_ != null)
+        {
+            held_item_.SetActive(false);
+        }
+        if ( obj.activeSelf )
+        {
+            print("the object was already active...");
+        }
+        else
+        {
+            obj.SetActive(true);
+        }
+
+        holdObjectToThrow(obj);
     }
 
 }
