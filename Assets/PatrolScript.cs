@@ -23,6 +23,7 @@ public class PatrolScript : MonoBehaviour {
 
     void GotoNextPoint()
     {
+
         // Returns if no points have been set up
         if (points.Length == 0)
             return;
@@ -40,7 +41,7 @@ public class PatrolScript : MonoBehaviour {
     {
         // Choose the next destination point when the agent gets
         // close to the current one.
-        if (agent.remainingDistance < 0.5f)
+        if (agent.remainingDistance < 1.5f)
             GotoNextPoint();
     }
 }
