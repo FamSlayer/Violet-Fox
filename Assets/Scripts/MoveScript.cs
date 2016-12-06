@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MoveScrip : MonoBehaviour {
+public class MoveScript : MonoBehaviour {
 
     public float speed = 20.0f;
     public float speedH = 2.0f;
@@ -9,18 +9,18 @@ public class MoveScrip : MonoBehaviour {
     public float jump_speed = 20;
     [Range(0,1)]
     public float camera_slow_when_firing = 0.5f;
-    private Vector3 moveDirection = Vector3.zero;
+    //private Vector3 moveDirection = Vector3.zero;
     private float pitch = 0.0f;
     private float yaw = 0.0f;
 
     private Rigidbody rb;
 
-    CharacterController controller;
+    //CharacterController controller;
 	// Use this for initialization
 	void Start () {
 	    Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        controller = GetComponent<CharacterController>();
+        //controller = GetComponent<CharacterController>();
         rb = GetComponent<Rigidbody>();
     }
 

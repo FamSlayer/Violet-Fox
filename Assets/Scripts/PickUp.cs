@@ -7,31 +7,19 @@ public class PickUp : MonoBehaviour {
     public List<GameObject> Inventory_items;
 
 
-    List<GameObject> nearby_items;
+    //List<GameObject> nearby_items;
 
 	// Use this for initialization
-	void Start () {
-        nearby_items = new List<GameObject>();
+	void Start ()
+   {
+        //nearby_items = new List<GameObject>();
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
 	
 	}
-
-
-    void onTriggerEnter( Collider other )
-    {
-        print("collider happened!");
-        print(other);
-    }
-
-    void onCollisionEnter(Collision other)
-    {
-        print("collision happened!");
-        print(other);
-    }
-
 
     public bool addToInventory( GameObject obj, string obj_name )
     {
