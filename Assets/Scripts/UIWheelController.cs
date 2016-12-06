@@ -24,7 +24,7 @@ public class UIWheelController : MonoBehaviour {
     public PickUp player_pickup;
     public List<string> Inventory_n;
     public List<GameObject> Inventory_i;
-    public int selected;
+    public int selected = 0;
 
     List<GameObject> children;
     int goal_orientation;
@@ -131,7 +131,7 @@ public class UIWheelController : MonoBehaviour {
          *      enable all the icons and stuff
          *      do everything normally
          */
-
+        print("selected at start of update: " + selected);
         if( Inventory_i.Count == 0)
         {
             if ( !setup0 )
@@ -162,8 +162,10 @@ public class UIWheelController : MonoBehaviour {
                 children[converted].SetActive(false);
                 children[converted + 1].SetActive(true);
                 children[converted + 2].SetActive(false);
-                setup1 = true;
 
+                oneItemSetup();
+
+                setup1 = true;
                 setup0 = false;
                 setup2 = false;
                 setup3 = false;
@@ -182,8 +184,10 @@ public class UIWheelController : MonoBehaviour {
                 children[converted].SetActive(false);
                 children[converted + 1].SetActive(true);
                 children[converted + 2].SetActive(true);
-                setup2 = true;
 
+                twoItemSetup();
+
+                setup2 = true;
                 setup0 = false;
                 setup1 = false;
                 setup3 = false;
@@ -195,13 +199,13 @@ public class UIWheelController : MonoBehaviour {
         {
             if ( !setup3 )
             {
-                for ( int i = 0; i < children.Count; i++ )
+                for (int i = 0; i < children.Count; i++)
                 {
                     children[i].SetActive(true);
                 }
                 threeItemSetup();
-                setup3 = true;
 
+                setup3 = true;
                 setup0 = false;
                 setup1 = false;
                 setup2 = false;
@@ -218,6 +222,7 @@ public class UIWheelController : MonoBehaviour {
             {
                 goal_orientation++;
                 selected++;
+                print("on E press increased selected");
                 goal_rot_change = new Vector3(0, 0, 45 * goal_orientation);
                 w_state = state_enum.spinning;
             }
@@ -271,7 +276,7 @@ public class UIWheelController : MonoBehaviour {
                 // NOW call the function to change held_item_ in Throw.cs
                 // convert to the size of the inventory
                 c2_index = c2_index % Inventory_i.Count;
-                player_throw.changeObjectHolding(Inventory_i[c2_index]);
+                player_throw.changeObjectHolding(Inventory_i[selected]);
 
                 if (Mathf.Abs(quat.eulerAngles.z - transform.rotation.eulerAngles.z) < snapping_threshold)
                 {
@@ -299,11 +304,39 @@ public class UIWheelController : MonoBehaviour {
         if ( x < 0 ) return Inventory_n[s + x];
         return Inventory_n[x];
     }
+    
+    
+    void oneItemSetup()
+    {
+        print("in one item setup: selected = " + selected);
+        string item_name = getNameAtInventoryIndex(selected);
+        children[1].GetComponent<UnityEngine.UI.Image>().sprite = icon_map[item_name];
+    }
 
-    //void UpdateUI
+    void twoItemSetup()
+    {
+        print("in two item setup: selected = " + selected);
+        string item_name = getNameAtInventoryIndex(selected);
+        children[1].GetComponent<UnityEngine.UI.Image>().sprite = icon_map[item_name];
+
+        string item2_name;
+        if ( selected == 0 )
+        {
+            item2_name = getNameAtInventoryIndex(1); // <-- b/c selected == 0 , selected + 1 = 1
+            children[2].GetComponent<UnityEngine.UI.Image>().sprite = icon_map[item2_name];
+        }
+        else if ( selected == 1 )
+        {
+            item2_name = getNameAtInventoryIndex(0); // <-- b/c selected == 1 , selected + 1 = 0
+            children[0].GetComponent<UnityEngine.UI.Image>().sprite = icon_map[item2_name];
+        }
+
+    }
+
 
     void threeItemSetup()
     {
+        //print("in threeItemSetup: selected = " + selected.ToString());
         string c1_name = getNameAtInventoryIndex(selected - 1);
         string c2_name = getNameAtInventoryIndex(selected);
         string c3_name = getNameAtInventoryIndex(selected + 1);
