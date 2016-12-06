@@ -28,6 +28,9 @@ public class Throw : MonoBehaviour
 
     LineRenderer throw_arc;
 
+    GameObject player;
+    PickUp player_pickup;
+
     // Use this for initialization
     void Start ()
     {
@@ -38,6 +41,9 @@ public class Throw : MonoBehaviour
         throw_arc.SetWidth(0f, .1f);
         throw_arc.enabled = false;
 
+        player = GameObject.FindGameObjectsWithTag("Player")[0];
+        player_pickup = player.GetComponent<PickUp>();
+
          
     }
 	
@@ -45,7 +51,7 @@ public class Throw : MonoBehaviour
 	void Update ()
     {
         offset = gameObject.transform.position + gameObject.transform.forward + gameObject.transform.right / 2f + gameObject.transform.up / 4f; // fake position, we'll change this ???
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(1))
         {
             GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
             holdObjectToThrow(obj);
@@ -56,7 +62,7 @@ public class Throw : MonoBehaviour
             action_state = p_state.aiming;
         }
 
-        if(Input.GetMouseButtonUp(0))
+        if(Input.GetMouseButtonUp(1))
         {
             action_state = p_state.throwing;
         }
@@ -93,7 +99,10 @@ public class Throw : MonoBehaviour
             Vector3 launch_velocity = getThrowVelocity( held_item_, throw_power );
             throwItem( held_item_, launch_velocity );
 
-            //  3. Set action_state back to waiting
+            //  3. Remove the object from the player
+            player_pickup.removeFromInventory(held_item_);
+
+            //  4. Set action_state back to waiting
             held_item_ = null;
             action_state = p_state.waiting;
             throw_arc.enabled = false;
@@ -228,6 +237,8 @@ public class Throw : MonoBehaviour
         rb.AddTorque(torque * init_velocity.magnitude, ForceMode.Impulse);
         item.transform.parent = null;
         //print(rb.velocity);
+
+        
     }
 
 

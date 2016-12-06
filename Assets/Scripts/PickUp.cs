@@ -51,8 +51,9 @@ public class PickUp : MonoBehaviour {
         return true;
     }
 
-    public void removeFromInventory(GameObject obj, string obj_name)
+    public void removeFromInventory(GameObject obj)
     {
+        print("are Inventory_items.Count == Inventory_names.Count);
         Inventory_names.RemoveAt(  Inventory_items.IndexOf(obj)  );
         Inventory_items.Remove(obj);
     }

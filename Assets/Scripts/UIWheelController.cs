@@ -32,6 +32,8 @@ public class UIWheelController : MonoBehaviour {
     Vector3 stating_rot;
     Vector3 goal_rot_change;
 
+    Throw player_throw;
+
     
     bool setup0 = false;
     bool setup1 = false;
@@ -44,6 +46,7 @@ public class UIWheelController : MonoBehaviour {
         icon_map = new Dictionary<string, Sprite>();
         children = new List<GameObject>();
         player_pickup = player.GetComponent<PickUp>();
+        player_throw = player.GetComponent<Throw>();
         Inventory_n = player_pickup.Inventory_names;
         Inventory_i = player_pickup.Inventory_items;
 
@@ -128,7 +131,7 @@ public class UIWheelController : MonoBehaviour {
          *      enable all the icons and stuff
          *      do everything normally
          */
-        print("inventory.count = " + Inventory_i.Count);
+
         if( Inventory_i.Count == 0)
         {
             if ( !setup0 )
@@ -196,26 +199,18 @@ public class UIWheelController : MonoBehaviour {
                 {
                     children[i].SetActive(true);
                 }
-            }
-            /*
-            int converted = goal_orientation % 8;
-            if (converted < 0) converted += 8;
+                threeItemSetup();
+                setup3 = true;
 
-            // set enabled
-            children[converted].SetActive(true);
-            children[converted + 1].SetActive(true);
-            children[converted + 2].SetActive(true);
-            */
-            // naively set all active every update step along the way
-            for(int i=0; i<children.Count; i++)
-            {
-                children[i].SetActive(true);
+                setup0 = false;
+                setup1 = false;
+                setup2 = false;
             }
 
-            for(int i=0; i<Inventory_i.Count; i++)
+            /*for(int i=0; i<Inventory_i.Count; i++)
             {
                 print("[" + i.ToString() + "] - " + Inventory_n[i]);
-            }
+            }*/
 
 
             // handle input
@@ -272,6 +267,11 @@ public class UIWheelController : MonoBehaviour {
                 children[c1_index].transform.localScale = new Vector3(0.2f, 0.2f, 1);
                 children[c2_index].transform.localScale = new Vector3(item_pop, item_pop, 1);
                 children[c3_index].transform.localScale = new Vector3(0.2f, 0.2f, 1);
+
+                // NOW call the function to change held_item_ in Throw.cs
+                // convert to the size of the inventory
+                c2_index = c2_index % Inventory_i.Count;
+                player_throw.changeObjectHolding(Inventory_i[c2_index]);
 
                 if (Mathf.Abs(quat.eulerAngles.z - transform.rotation.eulerAngles.z) < snapping_threshold)
                 {
