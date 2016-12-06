@@ -1,32 +1,34 @@
 fileFormatVersion: 2
-guid: b8103127b49a59146b3699a9f53ac017
-timeCreated: 1480548395
+guid: 059c536f1fb2b524e8e4390c767e2488
+timeCreated: 1481067351
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
-    100002: pSphere10
-    100004: pSphere11
-    100006: pSphere9
+    100002: pCube1
+    100004: pCube2
+    100006: pCube3
+    100008: pCube4
+    100010: transform1
+    100012: transform2
+    100014: transform3
     400000: //RootNode
-    400002: pSphere10
-    400004: pSphere11
-    400006: pSphere9
-    2300000: pSphere10
-    2300002: pSphere11
-    2300004: pSphere9
-    3300000: pSphere10
-    3300002: pSphere11
-    3300004: pSphere9
-    4300000: pSphere9
-    4300002: pSphere10
-    4300004: pSphere11
+    400002: pCube1
+    400004: pCube2
+    400006: pCube3
+    400008: pCube4
+    400010: transform1
+    400012: transform2
+    400014: transform3
+    2300000: pCube4
+    3300000: pCube4
+    4300000: pCube4
     9500000: //RootNode
   materials:
     importMaterials: 1
     materialName: 0
-    materialSearch: 0
+    materialSearch: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
