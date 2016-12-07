@@ -21,10 +21,10 @@ public class UIWheelController : MonoBehaviour {
     public List<Sprite> icon_sprites;
     public Dictionary<string, Sprite> icon_map;
 
-    public PickUp player_pickup;
-    public List<string> Inventory_n;
-    public List<GameObject> Inventory_i;
-    public int selected = 0;
+    PickUp player_pickup;
+    List<string> Inventory_n;
+    List<GameObject> Inventory_i;
+    int selected = 0;
 
     GameObject player;
     List<GameObject> children;
@@ -177,7 +177,7 @@ public class UIWheelController : MonoBehaviour {
                 if (c3_index > 7) c3_index -= 8;
 
                 // set enabled
-                print("inventory_i.Count == 1, and converted = " + converted);
+                //print("inventory_i.Count == 1, and converted = " + converted);
                 children[c1_index].SetActive(false);
                 children[c2_index].SetActive(true);
                 children[c3_index].SetActive(false);
@@ -199,7 +199,7 @@ public class UIWheelController : MonoBehaviour {
                 int converted = goal_orientation % 8;
                 if (converted < 0) converted += 8;
 
-                print("converted = " + converted);
+                //print("converted = " + converted);
                 // set disabled on all the kiddos
                 for(int i=0; i<children.Count; i++)
                 {
@@ -433,17 +433,17 @@ public class UIWheelController : MonoBehaviour {
 
     void updateUI ()
     {
-        print("start of updateUI.");
-        print("Previously, inventory_size was " + inventory_size + ", but it is now " + player_pickup.Inventory_items.Count);
+        //print("start of updateUI.");
+        //print("Previously, inventory_size was " + inventory_size + ", but it is now " + player_pickup.Inventory_items.Count);
 
         if ( player_pickup.Inventory_items.Count > 2 )
         {
-            print("Inventory will be greater than 2 anyway");
+            //print("Inventory will be greater than 2 anyway");
             string c1_name = getNameAtInventoryIndex(selected - 1);
             string c2_name = getNameAtInventoryIndex(selected);
             string c3_name = getNameAtInventoryIndex(selected + 1);
 
-            print("bot = " + c1_name + "  middle = " + c2_name + "  top = " + c3_name);
+            //print("bot = " + c1_name + "  middle = " + c2_name + "  top = " + c3_name);
 
             threeItemSetup();
             //children[0].GetComponent<UnityEngine.UI.Image>().sprite = icon_map[c1_name];
@@ -466,7 +466,7 @@ public class UIWheelController : MonoBehaviour {
 
         if (selected != 0)
             selected = 0;
-        print("in one item setup: selected = " + selected);
+        //print("in one item setup: selected = " + selected);
 
         int converted = goal_orientation % 8 + 1;
         if (converted < 0) converted += 8;
@@ -479,7 +479,7 @@ public class UIWheelController : MonoBehaviour {
     {
         if (selected > 1)
             selected = 0;
-        print("in two item setup: selected = " + selected);
+        //print("in two item setup: selected = " + selected);
         string item_name = getNameAtInventoryIndex(selected);
 
         int converted = goal_orientation % 8;
