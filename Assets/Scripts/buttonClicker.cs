@@ -4,13 +4,16 @@ using System.Collections;
 
 public class buttonClicker : MonoBehaviour
 {
-    public Button yourButton;
 
     void Start()
     {
-        //Button btn = yourButton.GetComponent<Button>();
+        Button btn = GetComponent<Button>();
         btn.onClick.AddListener(TaskOnClick);
+        print("added onclick function");
     }
+
+
+
 
     void TaskOnClick()
     {
