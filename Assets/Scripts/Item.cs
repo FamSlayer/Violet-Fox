@@ -126,12 +126,8 @@ public class Item : MonoBehaviour
     void OnCollisionEnter( Collision collision )
     {
         float speed = previous_velocities[0].magnitude;
-
-        
-
-
         float impact = speed * weight_;
-        print("Item impact = " + impact);
+        //print("Item impact = " + impact);
 
         float play_volume;
         bool sliding = false;
@@ -172,7 +168,7 @@ public class Item : MonoBehaviour
             audio_src_.volume = play_volume;
             if (sliding)
             {
-                print("item is sliding");
+                //print("item is sliding");
                 //audio_src_.PlayOneShot(drag_sound_);
                 AudioSource.PlayClipAtPoint(drag_sound_, transform.position, play_volume);
             }
@@ -182,6 +178,12 @@ public class Item : MonoBehaviour
                 AudioSource.PlayClipAtPoint(crash_sound_, transform.position, play_volume);
             }
             text_obj.SetActive(true);
+
+            // check to see if any guards heard the object
+
+            
+
+
         }
 
         
@@ -198,8 +200,12 @@ public class Item : MonoBehaviour
             // 
             //print(player_pickup);
             //player_pickup.addToInventory(gameObject, name_);
-            if(previous_velocities[0].magnitude < 1f)
+            if(previous_velocities[0].magnitude < 2f)
+            {
+                print("set active because of this collision");
                 p_state = pickup_state.active;
+
+            }
         }
         
     }

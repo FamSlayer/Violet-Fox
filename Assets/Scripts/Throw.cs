@@ -95,8 +95,12 @@ public class Throw : MonoBehaviour
         {
             if (!throw_arc.isVisible)
                 throw_arc.enabled = true;
-            
 
+            GameObject textOBJ = held_item_.transform.GetChild(0).gameObject;
+            //print("setting the text object inactive");
+            TextMesh tm = textOBJ.GetComponent<TextMesh>();
+            print("this is a text mesh i promise --> " + tm.text);
+            textOBJ.SetActive(false);
             //  1. Get the inputs! (ScrollWheel and Mouse Y)
             float mouse_y = Input.GetAxis("Mouse Y");
             float scrollwheel = Input.GetAxis("Mouse ScrollWheel");
@@ -290,6 +294,8 @@ public class Throw : MonoBehaviour
             else
             {
                 obj.SetActive(true);
+                //print("inside changeObjectHolding setting active to false");
+                //obj.transform.GetChild(0).gameObject.SetActive(false);
             }
 
             holdObjectToThrow(obj);
