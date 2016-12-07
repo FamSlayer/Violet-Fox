@@ -59,12 +59,17 @@ public class Item : MonoBehaviour
         player_pickup = player.GetComponent<PickUp>();
         p_state = pickup_state.inactive;
 
-        text_obj = transform.GetChild(0).gameObject;
+        text_offset = new Vector3(0f, 0.5f, 0f);
+
+        GameObject text_obj = new GameObject();
         TextMesh t_mesh = text_obj.GetComponent<TextMesh>();
         t_mesh.characterSize = 1;
         t_mesh.anchor = UnityEngine.TextAnchor.MiddleCenter;
         t_mesh.alignment = UnityEngine.TextAlignment.Center;
         t_mesh.text = "-F to pickup " + name_ + "-";
+
+        text_obj.transform.parent = transform;
+        text_obj.transform.localPosition = text_offset;
 
 
 
