@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class buttonClicker : MonoBehaviour
 {
@@ -14,10 +15,17 @@ public class buttonClicker : MonoBehaviour
     }
 
 
+    void Update()
+    {
+        if(Input.GetMouseButtonDown(0))
+        {
 
+        }
+    }
 
     public void TaskOnClick()
     {
-        Debug.Log("You have clicked the button!");
+        print("You have clicked the button!");
+        SceneManager.LoadScene("OrphanageMap", LoadSceneMode.Additive);
     }
 }
