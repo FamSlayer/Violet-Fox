@@ -114,7 +114,7 @@ public class Throw : MonoBehaviour
 
             //  2. Use ScrollWheel to increase/decrease the power
             throw_power += scrollwheel*2f;
-            throw_power = Mathf.Clamp(throw_power, 3f, 30f);
+            throw_power = Mathf.Clamp(throw_power, 3f, 50f);
             
             //  3. Use mouse Y to increase/decrease the throw_angle
             throw_angle += mouse_y;
