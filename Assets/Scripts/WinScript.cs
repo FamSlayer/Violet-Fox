@@ -9,7 +9,9 @@ public class WinScript : MonoBehaviour {
     }
 	void activated()
     {
-        SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        SceneManager.LoadScene("MainMenu");
     }
 	// Update is called once per frame
 	void Update () {

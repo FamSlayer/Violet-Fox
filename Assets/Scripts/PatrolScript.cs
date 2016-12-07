@@ -27,6 +27,7 @@ public class PatrolScript : MonoBehaviour {
 
     void GotoNextPoint()
     {
+        print("Changing Points");
         if(investipoint)
         {
             agent.destination = investipoint.position;
@@ -60,12 +61,14 @@ public class PatrolScript : MonoBehaviour {
         // Choose the next destination point when the agent gets
         // close to the current one.
         if (agent.remainingDistance < 1.5f)
-            if(investipoint)
+        {
+            if (investipoint)
             {
                 investipoint = null;
                 GotoNextPoint();
             }
             GotoNextPoint();
+        }
     }
     private void FixedUpdate()
     {
@@ -74,7 +77,7 @@ public class PatrolScript : MonoBehaviour {
         Vector3 direction = toPosition - fromPosition;
         //Vector3 direction = transform.TransformDirection(Vector3.forward);
         float angle = Vector3.Angle(transform.forward, player.transform.position);
-        if (angle < 60)
+        if (angle < 80)
         {
             RaycastHit hit;
             if(Physics.Raycast(transform.position, direction, out hit, visionDistance))
@@ -82,7 +85,9 @@ public class PatrolScript : MonoBehaviour {
                 if (hit.collider.tag == "Player")
                 {
                     //Idk do game over stuff
-                    SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
+                    Cursor.visible = true;
+                    Cursor.lockState = CursorLockMode.None;
+                    SceneManager.LoadScene("MainMenu");
                 }
             }
             
