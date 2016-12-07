@@ -9,7 +9,7 @@ public class WinScript : MonoBehaviour {
     }
 	void activated()
     {
-        SceneManager.LoadScene("MainScene", LoadSceneMode.Additive);
+        SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
     }
 	// Update is called once per frame
 	void Update () {
