@@ -31,7 +31,7 @@ public class Throw : MonoBehaviour
     GameObject player;
     PickUp player_pickup;
 
-    UIWheelController ui_wheel;
+    //UIWheelController ui_wheel;
 
     int item_index = 0;
 
@@ -48,8 +48,8 @@ public class Throw : MonoBehaviour
         player = GameObject.FindGameObjectsWithTag("Player")[0];
         player_pickup = player.GetComponent<PickUp>();
 
-        GameObject wheel = GameObject.FindGameObjectsWithTag("UI")[0];
-        ui_wheel = wheel.GetComponent<UIWheelController>();
+        //GameObject wheel = GameObject.FindGameObjectsWithTag("UI")[0];
+        //ui_wheel = wheel.GetComponent<UIWheelController>();
 
         
     }
@@ -58,32 +58,39 @@ public class Throw : MonoBehaviour
 	void Update ()
     {
         offset = gameObject.transform.position + gameObject.transform.forward + gameObject.transform.right / 2f + gameObject.transform.up / 4f; // fake position, we'll change this ???
-        //print(player_pickup.Inventory_items.Count);
-        if (Input.GetMouseButtonDown(1) && player_pickup.Inventory_items.Count > 0)
+        //print("In Throw.cs: " + player_pickup.Inventory_items.Count);
+
+        if( player_pickup.Inventory_items.Count != 0 )
         {
-            //print("ok trying to hold an item now...");
-            //GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            print("in Throw.cs: item_index = " + item_index);
-            if ( item_index >= player_pickup.Inventory_items.Count )
+            if (Input.GetMouseButtonDown(1) && player_pickup.Inventory_items.Count != 0)
             {
-                item_index -= player_pickup.Inventory_items.Count;
+                //print("In Throw.cs: ok trying to hold an item now when inventory.count = " + player_pickup.Inventory_items.Count);
+                //GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                //print("In Throw.cs: item_index = " + item_index);
+                if (item_index >= player_pickup.Inventory_items.Count)
+                {
+                    item_index -= player_pickup.Inventory_items.Count;
+                }
+                player_pickup.Inventory_items[item_index].SetActive(true);
+                holdObjectToThrow(player_pickup.Inventory_items[item_index]);
+                throw_power = default_throw_power;
+                throw_angle = Vector3.Angle(transform.forward, new Vector3(transform.forward.x, 0, transform.forward.z));
+                if (transform.forward.y < 0)
+                    throw_angle *= -1;
+                action_state = p_state.aiming;
             }
-            player_pickup.Inventory_items[item_index].SetActive(true);
-            holdObjectToThrow(player_pickup.Inventory_items[item_index]);
-            throw_power = default_throw_power;
-            throw_angle = Vector3.Angle(transform.forward, new Vector3(transform.forward.x, 0, transform.forward.z));
-            if (transform.forward.y < 0)
-                throw_angle *= -1;
-            action_state = p_state.aiming;
-        }
 
-        if(Input.GetMouseButtonUp(1))
+            if (Input.GetMouseButtonUp(1))
+            {
+                action_state = p_state.throwing;
+            }
+        }
+        else
         {
-            action_state = p_state.throwing;
+            action_state = p_state.waiting;
         }
         
         
-
         if ( action_state == p_state.aiming )
         {
             if (!throw_arc.isVisible)
@@ -206,17 +213,12 @@ public class Throw : MonoBehaviour
         // convert the List<Vector3> into an Vector3[] array
         Vector3[] positions = new Vector3[points.Count];
 
-        /*  ok well the difference between my function to convert it to an array and the .ToArray() function 
-         *      is that 
-         */
-
         //for (int i = 0; i < points.Count; i++) positions[i] = points[i];
         positions = points.ToArray();
-
+        // there's like a 0% change msdn's c# .ToArray() function is more efficient than mine, but whatever
 
         throw_arc.SetVertexCount(positions.Length);
         throw_arc.SetPositions(positions);
-
     }
 
     float getCurrentHeight(float t, float h0, float v0)

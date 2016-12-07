@@ -170,11 +170,17 @@ public class UIWheelController : MonoBehaviour {
                 int converted = goal_orientation % 8;
                 if (converted < 0) converted += 8;
 
+                int c1_index = converted;
+                int c2_index = converted + 1;
+                if (c2_index > 7) c2_index -= 8;
+                int c3_index = converted + 2;
+                if (c3_index > 7) c3_index -= 8;
+
                 // set enabled
                 print("inventory_i.Count == 1, and converted = " + converted);
-                children[converted].SetActive(false);
-                children[converted + 1].SetActive(true);
-                children[converted + 2].SetActive(false);
+                children[c1_index].SetActive(false);
+                children[c2_index].SetActive(true);
+                children[c3_index].SetActive(false);
 
                 oneItemSetup();
 
