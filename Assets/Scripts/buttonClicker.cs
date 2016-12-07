@@ -15,10 +15,13 @@ public class buttonClicker : MonoBehaviour
     }
     
 
+
     public void TaskOnClick()
     {
         print("You have clicked the button!");
-        SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive);
+        SceneManager.LoadSceneAsync(1);
         print("done loading..?");
+        
+        
     }
 }
