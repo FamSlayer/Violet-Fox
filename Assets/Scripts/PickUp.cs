@@ -7,8 +7,8 @@ public class PickUp : MonoBehaviour {
     public List<GameObject> Inventory_items;
 
     // for testing
-    public AudioClip prefab_crash_sound;
-    public AudioClip prefab_drag_sound_;
+    //public AudioClip prefab_crash_sound;
+    //public AudioClip prefab_drag_sound_;
 
     
 	void Start ()
@@ -103,8 +103,8 @@ public class PickUp : MonoBehaviour {
         item_script.name_ = nombre;
         item_script.text_offset = new Vector3(0f, 0.5f, 0f);
         item_script.default_sound_volume_ = 1;
-        item_script.crash_sound_ = prefab_crash_sound;
-        item_script.drag_sound_ = prefab_drag_sound_;
+        //item_script.crash_sound_ = prefab_crash_sound;
+        //item_script.drag_sound_ = prefab_drag_sound_;
         item_script.prev_velocities_kept = 2;
 
         // add capsule collider
