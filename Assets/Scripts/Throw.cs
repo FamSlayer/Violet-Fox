@@ -72,6 +72,7 @@ public class Throw : MonoBehaviour
                     item_index -= player_pickup.Inventory_items.Count;
                 }
                 player_pickup.Inventory_items[item_index].SetActive(true);
+
                 holdObjectToThrow(player_pickup.Inventory_items[item_index]);
                 throw_power = default_throw_power;
                 throw_angle = Vector3.Angle(transform.forward, new Vector3(transform.forward.x, 0, transform.forward.z));
@@ -294,8 +295,8 @@ public class Throw : MonoBehaviour
             else
             {
                 obj.SetActive(true);
-                //print("inside changeObjectHolding setting active to false");
-                //obj.transform.GetChild(0).gameObject.SetActive(false);
+                print("inside changeObjectHolding setting active to false");
+                obj.transform.GetChild(0).gameObject.SetActive(false);
             }
 
             holdObjectToThrow(obj);
