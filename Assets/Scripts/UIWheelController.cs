@@ -10,7 +10,7 @@ public class UIWheelController : MonoBehaviour {
     }
     state_enum w_state = state_enum.stationary;
 
-    public GameObject player;
+    
     public float wheel_radius;
     public float wheel_turn_speed;
     public float snapping_threshold;
@@ -26,6 +26,7 @@ public class UIWheelController : MonoBehaviour {
     public List<GameObject> Inventory_i;
     public int selected = 0;
 
+    GameObject player;
     List<GameObject> children;
     int goal_orientation;
     int inventory_size;
@@ -45,6 +46,7 @@ public class UIWheelController : MonoBehaviour {
         // initialize all the data structures
         icon_map = new Dictionary<string, Sprite>();
         children = new List<GameObject>();
+        player = GameObject.FindGameObjectsWithTag("Player")[0];
         player_pickup = player.GetComponent<PickUp>();
         player_throw = player.GetComponent<Throw>();
         Inventory_n = player_pickup.Inventory_names;
@@ -118,6 +120,15 @@ public class UIWheelController : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+        
+        if ( inventory_size != player_pickup.Inventory_items.Count )
+        {
+            updateUI();
+            inventory_size = player_pickup.Inventory_items.Count;
+        }
+        
+
+
         /*  4 states
          *  1. Inventory.Count == 0
          *      don't display anything, all the children should be disabled
@@ -131,8 +142,9 @@ public class UIWheelController : MonoBehaviour {
          *      enable all the icons and stuff
          *      do everything normally
          */
-        print("selected at start of update: " + selected);
-        if( Inventory_i.Count == 0)
+
+
+        if(inventory_size == 0)
         {
             if ( !setup0 )
             {
@@ -151,7 +163,7 @@ public class UIWheelController : MonoBehaviour {
             }
 
         }
-        else if( Inventory_i.Count == 1)
+        else if( inventory_size == 1)
         {
             if ( !setup1 )
             {
@@ -159,6 +171,7 @@ public class UIWheelController : MonoBehaviour {
                 if (converted < 0) converted += 8;
 
                 // set enabled
+                print("inventory_i.Count == 1, and converted = " + converted);
                 children[converted].SetActive(false);
                 children[converted + 1].SetActive(true);
                 children[converted + 2].SetActive(false);
@@ -173,17 +186,46 @@ public class UIWheelController : MonoBehaviour {
             
 
         }
-        else if( Inventory_i.Count == 2)
+        else if(inventory_size == 2)
         {
             if ( !setup2 )
             {
                 int converted = goal_orientation % 8;
                 if (converted < 0) converted += 8;
 
-                // set enabled
-                children[converted].SetActive(false);
-                children[converted + 1].SetActive(true);
-                children[converted + 2].SetActive(true);
+                print("converted = " + converted);
+                // set disabled on all the kiddos
+                for(int i=0; i<children.Count; i++)
+                {
+                    children[i].SetActive(false);
+                }
+
+                // and be sure to loop around!
+                if(converted + 1 >= children.Count)
+                {
+                    children[converted + 1 - children.Count].SetActive(true);
+                }
+                else
+                {
+                    children[converted + 1].SetActive(true);
+                }
+
+
+                if (selected == 0)
+                {
+                    if (converted + 2 >= children.Count)
+                    {
+                        children[converted + 2 - children.Count].SetActive(true);
+                    }
+                    else
+                    {
+                        children[converted + 2].SetActive(true);
+                    }
+                }
+                else if (selected == 1)
+                {
+                    children[converted].SetActive(true);
+                }
 
                 twoItemSetup();
 
@@ -193,9 +235,87 @@ public class UIWheelController : MonoBehaviour {
                 setup3 = false;
             }
             
+            // handle input
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                if ( selected == 0 )
+                {
+                    goal_orientation++;
+                    selected = 1;
+                    goal_rot_change = new Vector3(0, 0, 45 * goal_orientation);
+                    w_state = state_enum.spinning;
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                if ( selected == 1 )
+                {
+                    goal_orientation--;
+                    selected = 0;
+                    goal_rot_change = new Vector3(0, 0, 45 * goal_orientation);
+                    w_state = state_enum.spinning;
+                }
+                
+            }
+
+            // loop 'selected' around the length of the Inventory_n
+            if (selected == Inventory_n.Count) selected = selected % Inventory_n.Count;
+            if (selected < 0) selected += Inventory_n.Count;
+
+            
+            //int converted = goal_orientation % 8;
+            //if (converted < 0) converted += 8;
+
+            if (w_state == state_enum.spinning)
+            {
+                Quaternion quat = Quaternion.identity;
+                quat.eulerAngles = goal_rot_change;
+                transform.rotation = Quaternion.Lerp(transform.rotation, quat, wheel_turn_speed * Time.deltaTime);
+
+                foreach (Transform child in transform)
+                {
+                    child.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+                }
+
+                int converted = goal_orientation % 8;
+                if (converted < 0) converted += 8;
+                // converted is now the index of the child at the bottom of the visible wheel
+
+                int c1, c2;
+                if ( selected == 1 )
+                {
+                    c1 = converted;
+                    c2 = converted + 1;
+                    if (c2 > 7) c2 -= 8;
+                    children[c1].transform.localScale = new Vector3(0.2f, 0.2f, 1);
+                    children[c2].transform.localScale = new Vector3(item_pop, item_pop, 1);
+                }
+                else
+                {
+                    c1 = converted + 1;
+                    if (c1 > 7) c1 -= 8;
+                    c2 = converted + 2;
+                    if (c2 > 7) c2 -= 8;
+                    children[c1].transform.localScale = new Vector3(item_pop, item_pop, 1);
+                    children[c2].transform.localScale = new Vector3(0.2f, 0.2f, 1);
+                }
+
+
+                player_throw.changeObjectHolding(Inventory_i[selected]);
+
+                if (Mathf.Abs(quat.eulerAngles.z - transform.rotation.eulerAngles.z) < snapping_threshold)
+                {
+                    transform.rotation = quat;
+                    w_state = state_enum.stationary;
+                }
+            }
+
+
+
 
         }
-        else
+        // INVENTORY_SIZE == 3
+        else 
         {
             if ( !setup3 )
             {
@@ -222,7 +342,6 @@ public class UIWheelController : MonoBehaviour {
             {
                 goal_orientation++;
                 selected++;
-                print("on E press increased selected");
                 goal_rot_change = new Vector3(0, 0, 45 * goal_orientation);
                 w_state = state_enum.spinning;
             }
@@ -305,30 +424,79 @@ public class UIWheelController : MonoBehaviour {
         return Inventory_n[x];
     }
     
+
+    void updateUI ()
+    {
+        print("start of updateUI.");
+        print("Previously, inventory_size was " + inventory_size + ", but it is now " + player_pickup.Inventory_items.Count);
+
+        if ( player_pickup.Inventory_items.Count > 2 )
+        {
+            print("Inventory will be greater than 2 anyway");
+            string c1_name = getNameAtInventoryIndex(selected - 1);
+            string c2_name = getNameAtInventoryIndex(selected);
+            string c3_name = getNameAtInventoryIndex(selected + 1);
+
+            print("bot = " + c1_name + "  middle = " + c2_name + "  top = " + c3_name);
+
+            threeItemSetup();
+            //children[0].GetComponent<UnityEngine.UI.Image>().sprite = icon_map[c1_name];
+            //children[1].GetComponent<UnityEngine.UI.Image>().sprite = icon_map[c2_name];
+            //children[2].GetComponent<UnityEngine.UI.Image>().sprite = icon_map[c3_name];
+
+            //children[1].transform.localScale = new Vector3(item_pop, item_pop, 0f);
+        }
+
+
+
+    }
+
+
+
+
     
     void oneItemSetup()
     {
+
+        if (selected != 0)
+            selected = 0;
         print("in one item setup: selected = " + selected);
+
+        int converted = goal_orientation % 8 + 1;
+        if (converted < 0) converted += 8;
+
         string item_name = getNameAtInventoryIndex(selected);
-        children[1].GetComponent<UnityEngine.UI.Image>().sprite = icon_map[item_name];
+        children[converted].GetComponent<UnityEngine.UI.Image>().sprite = icon_map[item_name];
     }
 
     void twoItemSetup()
     {
+        if (selected > 1)
+            selected = 0;
         print("in two item setup: selected = " + selected);
         string item_name = getNameAtInventoryIndex(selected);
-        children[1].GetComponent<UnityEngine.UI.Image>().sprite = icon_map[item_name];
+
+        int converted = goal_orientation % 8;
+        if (converted < 0) converted += 8;
+
+        int c1_index = converted;
+        int c2_index = converted + 1;
+        if (c2_index > 7) c2_index -= 8;
+        int c3_index = converted + 2;
+        if (c3_index > 7) c3_index -= 8;
+
+        children[c2_index].GetComponent<UnityEngine.UI.Image>().sprite = icon_map[item_name];
 
         string item2_name;
         if ( selected == 0 )
         {
             item2_name = getNameAtInventoryIndex(1); // <-- b/c selected == 0 , selected + 1 = 1
-            children[2].GetComponent<UnityEngine.UI.Image>().sprite = icon_map[item2_name];
+            children[c3_index].GetComponent<UnityEngine.UI.Image>().sprite = icon_map[item2_name];
         }
         else if ( selected == 1 )
         {
             item2_name = getNameAtInventoryIndex(0); // <-- b/c selected == 1 , selected + 1 = 0
-            children[0].GetComponent<UnityEngine.UI.Image>().sprite = icon_map[item2_name];
+            children[c1_index].GetComponent<UnityEngine.UI.Image>().sprite = icon_map[item2_name];
         }
 
     }
@@ -336,16 +504,48 @@ public class UIWheelController : MonoBehaviour {
 
     void threeItemSetup()
     {
+        if (selected > player_pickup.Inventory_items.Count)
+            selected = 0;
         //print("in threeItemSetup: selected = " + selected.ToString());
+        int converted = goal_orientation % 8;
+        if (converted < 0) converted += 8;
+
         string c1_name = getNameAtInventoryIndex(selected - 1);
         string c2_name = getNameAtInventoryIndex(selected);
         string c3_name = getNameAtInventoryIndex(selected + 1);
 
         // load up the images on the UI with the names of 
-        children[0].GetComponent<UnityEngine.UI.Image>().sprite = icon_map[c1_name];
-        children[1].GetComponent<UnityEngine.UI.Image>().sprite = icon_map[c2_name];
-        children[2].GetComponent<UnityEngine.UI.Image>().sprite = icon_map[c3_name];
+        int c1_index = converted;
+        int c2_index = converted + 1;
+        if (c2_index > 7) c2_index -= 8;
+        int c3_index = converted + 2;
+        if (c3_index > 7) c3_index -= 8;
 
-        children[1].transform.localScale = new Vector3(item_pop, item_pop, 0f);
+        children[c1_index].GetComponent<UnityEngine.UI.Image>().sprite = icon_map[c1_name];
+        children[c2_index].GetComponent<UnityEngine.UI.Image>().sprite = icon_map[c2_name];
+        children[c3_index].GetComponent<UnityEngine.UI.Image>().sprite = icon_map[c3_name];
+
+        children[c1_index].transform.localScale = new Vector3(0.2f, 0.2f, 0f);
+        children[c2_index].transform.localScale = new Vector3(item_pop, item_pop, 0f);
+        children[c3_index].transform.localScale = new Vector3(item_pop, item_pop, 0f);
     }
+
+
+    public void updateUIAfterThrow()
+    {
+        int size = player_pickup.Inventory_items.Count;
+        if ( size == 1 )
+        {
+            oneItemSetup();
+        }
+        else if( size == 2 )
+        {
+            twoItemSetup();
+        }
+        else if( size > 2 )
+        {
+            threeItemSetup();
+        }
+    }
+
 }

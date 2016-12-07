@@ -31,6 +31,8 @@ public class Throw : MonoBehaviour
     GameObject player;
     PickUp player_pickup;
 
+    UIWheelController ui_wheel;
+
     int item_index = 0;
 
     // Use this for initialization
@@ -46,6 +48,9 @@ public class Throw : MonoBehaviour
         player = GameObject.FindGameObjectsWithTag("Player")[0];
         player_pickup = player.GetComponent<PickUp>();
 
+        GameObject wheel = GameObject.FindGameObjectsWithTag("UI")[0];
+        ui_wheel = wheel.GetComponent<UIWheelController>();
+
         
     }
 	
@@ -58,6 +63,11 @@ public class Throw : MonoBehaviour
         {
             //print("ok trying to hold an item now...");
             //GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            print("in Throw.cs: item_index = " + item_index);
+            if ( item_index >= player_pickup.Inventory_items.Count )
+            {
+                item_index -= player_pickup.Inventory_items.Count;
+            }
             player_pickup.Inventory_items[item_index].SetActive(true);
             holdObjectToThrow(player_pickup.Inventory_items[item_index]);
             throw_power = default_throw_power;
@@ -105,9 +115,12 @@ public class Throw : MonoBehaviour
             Vector3 launch_velocity = getThrowVelocity( held_item_, throw_power );
             throwItem( held_item_, launch_velocity );
 
-            //  3. Remove the object from the player
+            //  3. Remove the object from the player inventory
             item_index = player_pickup.Inventory_items.IndexOf(held_item_);
             player_pickup.removeFromInventory(held_item_);
+
+            //  4. Call update on the UI
+            //ui_wheel.updateUIAfterThrow();
 
             //  4. Set action_state back to waiting
             held_item_ = null;
