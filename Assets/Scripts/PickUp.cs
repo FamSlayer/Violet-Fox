@@ -14,7 +14,7 @@ public class PickUp : MonoBehaviour {
 	void Start ()
     {
         //nearby_items = new List<GameObject>();
-
+        /*
         Inventory_names.Add("bottle");
         Inventory_items.Add(makeDefaultItem(PrimitiveType.Cylinder, "bottle"));
 
@@ -26,7 +26,7 @@ public class PickUp : MonoBehaviour {
 
         Inventory_names.Add("fork");
         Inventory_items.Add(makeDefaultItem(PrimitiveType.Capsule, "fork"));
-        
+        */
     }
 
     // Update is called once per frame
