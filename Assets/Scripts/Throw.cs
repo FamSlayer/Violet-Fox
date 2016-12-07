@@ -57,7 +57,7 @@ public class Throw : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        offset = gameObject.transform.position + gameObject.transform.forward + gameObject.transform.right / 2f + gameObject.transform.up / 4f; // fake position, we'll change this ???
+        offset = gameObject.transform.position + gameObject.transform.forward + gameObject.transform.right / 2f + gameObject.transform.up * 3f; // fake position, we'll change this ???
         //print("In Throw.cs: " + player_pickup.Inventory_items.Count);
 
         if( player_pickup.Inventory_items.Count != 0 )
