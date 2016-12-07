@@ -27,14 +27,14 @@ public class Item : MonoBehaviour
     AudioSource audio_src_;
 
     public float minimum_speed_to_make_sound = 2f;
-    public float quiet_vol_impact_threshold = 5f;
-    public float middle_vol_impact_threshold = 25f;
-    public float loud_vol_impact_threshold = 50f;
+    public float quiet_vol_impact_threshold = 3f;
+    public float middle_vol_impact_threshold = 10f;
+    public float loud_vol_impact_threshold = 20f;
 
     [Range(0, 1)]
-    public float quiet_vol = .33f;
+    public float quiet_vol = .25f;
     [Range(0, 1)]
-    public float middle_vol = .66f;
+    public float middle_vol = .5f;
     [Range(0, 1)]
     public float loud_vol = 1f;
 
@@ -70,8 +70,12 @@ public class Item : MonoBehaviour
         t_mesh.alignment = UnityEngine.TextAlignment.Center;
         t_mesh.text = "-F to pickup " + name_ + "-";
 
+        text_obj.transform.localScale = new Vector3(0.2f,0.2f,0.2f);
         text_obj.transform.parent = transform;
         text_obj.transform.localPosition = text_offset;
+
+
+        text_obj.SetActive(false);
 
 
 
@@ -105,6 +109,7 @@ public class Item : MonoBehaviour
             if(Input.GetKeyDown(KeyCode.F))
             {
                 print(" ay pick it up lmao ");
+                text_obj.SetActive(false);
                 player_pickup.addToInventory(gameObject, name_);
                 //gameObject.SetActive(false);
             }
@@ -121,6 +126,9 @@ public class Item : MonoBehaviour
     void OnCollisionEnter( Collision collision )
     {
         float speed = previous_velocities[0].magnitude;
+
+        
+
 
         float impact = speed * weight_;
         print("Item impact = " + impact);
@@ -173,6 +181,7 @@ public class Item : MonoBehaviour
                 //audio_src_.PlayOneShot(crash_sound_);
                 AudioSource.PlayClipAtPoint(crash_sound_, transform.position, play_volume);
             }
+            text_obj.SetActive(true);
         }
 
         
@@ -189,7 +198,8 @@ public class Item : MonoBehaviour
             // 
             //print(player_pickup);
             //player_pickup.addToInventory(gameObject, name_);
-            p_state = pickup_state.active;
+            if(previous_velocities[0].magnitude < 1f)
+                p_state = pickup_state.active;
         }
         
     }

@@ -95,6 +95,7 @@ public class Throw : MonoBehaviour
         {
             if (!throw_arc.isVisible)
                 throw_arc.enabled = true;
+            
 
             //  1. Get the inputs! (ScrollWheel and Mouse Y)
             float mouse_y = Input.GetAxis("Mouse Y");
