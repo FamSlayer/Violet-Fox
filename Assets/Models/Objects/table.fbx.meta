@@ -1,10 +1,16 @@
 fileFormatVersion: 2
-guid: 2277a2e432b9f4645818e29105157a3b
-timeCreated: 1480725782
+guid: ff281dc77a7062b4f898a9e60e4922de
+timeCreated: 1481080891
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    100000: //RootNode
+    400000: //RootNode
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: pCube1
+    9500000: //RootNode
   materials:
     importMaterials: 1
     materialName: 0

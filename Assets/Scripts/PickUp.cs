@@ -53,9 +53,27 @@ public class PickUp : MonoBehaviour {
 
     public void removeFromInventory(GameObject obj)
     {
-        print("are Inventory_items.Count == Inventory_names.Count);
-        Inventory_names.RemoveAt(  Inventory_items.IndexOf(obj)  );
+        //print("are the items and names lists the same length? " + (Inventory_items.Count == Inventory_names.Count));
+        int dex = Inventory_items.IndexOf(obj);
+        //print("items[obj] = " + dex);
+        print("Removing '" + Inventory_names[dex] + "' from inventory. Resulting Inventory is:");
+        
+        Inventory_names.RemoveAt( dex );
         Inventory_items.Remove(obj);
+
+        if( Inventory_names.Count > 0 )
+        {
+            for (int i = 0; i < Inventory_names.Count; i++)
+            {
+                print("[" + i.ToString() + "] - " + Inventory_names[i]);
+            }
+        }
+
+        else
+        {
+            print("[empty]");
+        }
+        
     }
 
 

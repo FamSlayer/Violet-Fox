@@ -31,6 +31,8 @@ public class Throw : MonoBehaviour
     GameObject player;
     PickUp player_pickup;
 
+    int item_index = 0;
+
     // Use this for initialization
     void Start ()
     {
@@ -44,17 +46,20 @@ public class Throw : MonoBehaviour
         player = GameObject.FindGameObjectsWithTag("Player")[0];
         player_pickup = player.GetComponent<PickUp>();
 
-         
+        
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
         offset = gameObject.transform.position + gameObject.transform.forward + gameObject.transform.right / 2f + gameObject.transform.up / 4f; // fake position, we'll change this ???
-        if (Input.GetMouseButtonDown(1))
+        //print(player_pickup.Inventory_items.Count);
+        if (Input.GetMouseButtonDown(1) && player_pickup.Inventory_items.Count > 0)
         {
-            GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            holdObjectToThrow(obj);
+            //print("ok trying to hold an item now...");
+            //GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            player_pickup.Inventory_items[item_index].SetActive(true);
+            holdObjectToThrow(player_pickup.Inventory_items[item_index]);
             throw_power = default_throw_power;
             throw_angle = Vector3.Angle(transform.forward, new Vector3(transform.forward.x, 0, transform.forward.z));
             if (transform.forward.y < 0)
@@ -66,6 +71,7 @@ public class Throw : MonoBehaviour
         {
             action_state = p_state.throwing;
         }
+        
         
 
         if ( action_state == p_state.aiming )
@@ -100,6 +106,7 @@ public class Throw : MonoBehaviour
             throwItem( held_item_, launch_velocity );
 
             //  3. Remove the object from the player
+            item_index = player_pickup.Inventory_items.IndexOf(held_item_);
             player_pickup.removeFromInventory(held_item_);
 
             //  4. Set action_state back to waiting
@@ -132,7 +139,7 @@ public class Throw : MonoBehaviour
         obj.transform.parent = gameObject.transform;
 
         //  4. Turn off gravity and stuff
-        obj.AddComponent<Rigidbody>();
+        //obj.AddComponent<Rigidbody>();
         Rigidbody rb = obj.GetComponent<Rigidbody>();
         rb.useGravity = false;
         rb.detectCollisions = false;
@@ -252,20 +259,30 @@ public class Throw : MonoBehaviour
     // this is the function called by the UI to change the held item
     public void changeObjectHolding ( GameObject obj )
     {
-        if(held_item_ != null)
+        if(action_state == p_state.aiming)
         {
-            held_item_.SetActive(false);
-        }
-        if ( obj.activeSelf )
-        {
-            print("the object was already active...");
+            if (held_item_ != null)
+            {
+                held_item_.SetActive(false);
+                held_item_.transform.parent = null;
+            }
+
+            if (obj.activeSelf)
+            {
+                print("the object was already active...");
+            }
+            else
+            {
+                obj.SetActive(true);
+            }
+
+            holdObjectToThrow(obj);
         }
         else
         {
-            obj.SetActive(true);
+            item_index = player_pickup.Inventory_items.IndexOf(obj);
         }
-
-        holdObjectToThrow(obj);
+        
     }
 
 }
