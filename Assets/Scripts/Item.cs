@@ -14,27 +14,39 @@ public class Item : MonoBehaviour
     public string name_;
     public Vector3 text_offset;
     public float default_sound_volume_;
-    public AudioClip sound_;
-
-    AudioSource audio_src_;
-
+    
     public int prev_velocities_kept;
     Vector3[] previous_velocities;
     int index_rofl = 0;
 
-    private PickUp player_pickup;
 
-    Rigidbody rb;
+
+    // publics for sound
+    public AudioClip crash_sound_;
+    public AudioClip drag_sound_;
+    AudioSource audio_src_;
+
+    public float minimum_speed_to_make_sound = 2f;
+    public float quiet_vol_impact_threshold = 5f;
+    public float middle_vol_impact_threshold = 25f;
+    public float loud_vol_impact_threshold = 50f;
+
+    [Range(0, 1)]
+    public float quiet_vol = .33f;
+    [Range(0, 1)]
+    public float middle_vol = .66f;
+    [Range(0, 1)]
+    public float loud_vol = 1f;
+
+
+    // privates
     GameObject player;
+    private PickUp player_pickup;
+    Rigidbody rb;
     GameObject text_obj;
     private float weight_;
 
-    /* so let's say 0.5 is our average volume for EVERYTHING in the game 
-     * should objects going above 0.5 fall off with a logithmic approach towards 1?
-     * 
-     * 
-     * 
-     */
+    
 
     void Start ()
     {
@@ -49,6 +61,9 @@ public class Item : MonoBehaviour
 
         text_obj = transform.GetChild(0).gameObject;
         TextMesh t_mesh = text_obj.GetComponent<TextMesh>();
+        t_mesh.characterSize = 1;
+        t_mesh.anchor = UnityEngine.TextAnchor.MiddleCenter;
+        t_mesh.alignment = UnityEngine.TextAlignment.Center;
         t_mesh.text = "-F to pickup " + name_ + "-";
 
 
@@ -99,15 +114,61 @@ public class Item : MonoBehaviour
     void OnCollisionEnter( Collision collision )
     {
         float speed = previous_velocities[0].magnitude;
-        if( speed > 2)
+
+        float impact = speed * weight_;
+        print("Item impact = " + impact);
+
+        float play_volume;
+        bool sliding = false;
+        bool should_play = true;
+        if( Mathf.Abs(previous_velocities[0].y) < minimum_speed_to_make_sound && Mathf.Abs(previous_velocities[0].y) > 0.2f)
         {
-            audio_src_.volume = default_sound_volume_ * speed * weight_;
-            audio_src_.PlayOneShot(sound_);
-            AudioSource.PlayClipAtPoint(sound_, transform.position, default_sound_volume_ * speed * weight_);
+            play_volume = 0;
+            sliding = true;
+            should_play = false;
         }
+        else if ( impact <= quiet_vol_impact_threshold )
+        {
+            play_volume = quiet_vol;
+            sliding = true;
+            should_play = true;
+        }
+        else if (impact <= middle_vol_impact_threshold)
+        {
+            play_volume = quiet_vol;
+            sliding = false;
+            should_play = true;
+        }
+        else if (impact <= loud_vol_impact_threshold)
+        {
+            play_volume = middle_vol;
+            sliding = false;
+            should_play = true;
+        }
+        else // impact > middle_vol_impact_threshold
+        {
+            play_volume = loud_vol;
+            sliding = false;
+            should_play = true;
+        }
+
+        if(should_play)
+        {
+            audio_src_.volume = play_volume;
+            if (sliding)
+            {
+                print("item is sliding");
+                audio_src_.PlayOneShot(drag_sound_);
+                AudioSource.PlayClipAtPoint(drag_sound_, transform.position, play_volume);
+            }
+            else
+            {
+                audio_src_.PlayOneShot(crash_sound_);
+                AudioSource.PlayClipAtPoint(crash_sound_, transform.position, play_volume);
+            }
+        }
+
         
-
-
     }
 
 

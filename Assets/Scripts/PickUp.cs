@@ -6,12 +6,11 @@ public class PickUp : MonoBehaviour {
     public List<string> Inventory_names;
     public List<GameObject> Inventory_items;
 
-    public AudioClip prefab_sound_;
+    // for testing
+    public AudioClip prefab_crash_sound;
+    public AudioClip prefab_drag_sound_;
 
-
-    //List<GameObject> nearby_items;
-
-	// Use this for initialization
+    
 	void Start ()
     {
         //nearby_items = new List<GameObject>();
@@ -27,11 +26,7 @@ public class PickUp : MonoBehaviour {
 
         Inventory_names.Add("fork");
         Inventory_items.Add(makeDefaultItem(PrimitiveType.Capsule, "fork"));
-
         
-
-
-
     }
 
     // Update is called once per frame
@@ -105,7 +100,8 @@ public class PickUp : MonoBehaviour {
         item_script.name_ = nombre;
         item_script.text_offset = new Vector3(0f, 0.5f, 0f);
         item_script.default_sound_volume_ = 1;
-        item_script.sound_ = prefab_sound_;
+        item_script.crash_sound_ = prefab_crash_sound;
+        item_script.drag_sound_ = prefab_drag_sound_;
         item_script.prev_velocities_kept = 2;
 
         // add capsule collider
