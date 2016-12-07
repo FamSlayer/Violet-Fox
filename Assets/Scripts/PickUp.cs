@@ -42,6 +42,7 @@ public class PickUp : MonoBehaviour {
 
     public bool addToInventory( GameObject obj, string obj_name )
     {
+        obj.SetActive(false);
         if (Inventory_items.Contains(obj))
         {
             return false;

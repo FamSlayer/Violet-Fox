@@ -79,19 +79,14 @@ public class Item : MonoBehaviour
         {
             text_obj.SetActive(true);
             text_obj.transform.rotation = Quaternion.LookRotation(text_obj.transform.position - player.transform.position);
-
-
-
+            
             if(Input.GetKeyDown(KeyCode.F))
             {
                 print(" ay pick it up lmao ");
                 player_pickup.addToInventory(gameObject, name_);
-                gameObject.SetActive(false);
+                //gameObject.SetActive(false);
             }
-
-
-
-
+            
         }
 
         else if ( p_state == pickup_state.inactive )
