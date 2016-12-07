@@ -8,14 +8,15 @@ public class buttonClicker : MonoBehaviour
     void Start()
     {
         Button btn = GetComponent<Button>();
-        btn.onClick.AddListener(TaskOnClick);
+        btn.onClick.AddListener( TaskOnClick );
         print("added onclick function");
+        //print(btn.onClick.ToString);
     }
 
 
 
 
-    void TaskOnClick()
+    public void TaskOnClick()
     {
         Debug.Log("You have clicked the button!");
     }
