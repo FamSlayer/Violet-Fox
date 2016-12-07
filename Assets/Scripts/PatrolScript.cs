@@ -30,17 +30,21 @@ public class PatrolScript : MonoBehaviour {
         {
             agent.destination = investipoint.position;
         }
+        else
+        {
+            // Returns if no points have been set up
+            if (points.Length == 0)
+                return;
 
-        // Returns if no points have been set up
-        if (points.Length == 0)
-            return;
+            // Set the agent to go to the currently selected destination.
+            agent.destination = points[destPoint].position;
 
-        // Set the agent to go to the currently selected destination.
-        agent.destination = points[destPoint].position;
+            // Choose the next point in the array as the destination,
+            // cycling to the start if necessary.
+            destPoint = (destPoint + 1) % points.Length;
+        }
 
-        // Choose the next point in the array as the destination,
-        // cycling to the start if necessary.
-        destPoint = (destPoint + 1) % points.Length;
+        
     }
 
     public void Investigate(Transform duck)
