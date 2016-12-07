@@ -76,12 +76,16 @@ public class PatrolScript : MonoBehaviour {
         if (angle > 60)
         {
             RaycastHit hit;
-            Physics.Raycast(transform.position, direction, out hit, visionDistance);
-            if(hit.collider.tag == "Player")
+            ;
+            if(Physics.Raycast(transform.position, direction, out hit, visionDistance))
             {
-                //Idk do game over stuff
-                print("You got caught asshole");
+                if (hit.collider.tag == "Player")
+                {
+                    //Idk do game over stuff
+                    print("You got caught asshole");
+                }
             }
+            
         }
     }
 }
