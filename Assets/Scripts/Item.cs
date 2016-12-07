@@ -43,7 +43,7 @@ public class Item : MonoBehaviour
     GameObject player;
     private PickUp player_pickup;
     Rigidbody rb;
-    GameObject text_obj;
+    //GameObject text_obj;
     private float weight_;
 
     
@@ -62,6 +62,7 @@ public class Item : MonoBehaviour
 
         text_offset = new Vector3(0f, 0.5f, 0f);
 
+        /*
         text_obj = new GameObject();
         text_obj.AddComponent<TextMesh>();
         TextMesh t_mesh = text_obj.GetComponent<TextMesh>();
@@ -76,7 +77,7 @@ public class Item : MonoBehaviour
 
 
         text_obj.SetActive(false);
-
+        */
 
 
     }
@@ -86,8 +87,8 @@ public class Item : MonoBehaviour
         // store the current velocity at the end of the array and bump it
         Vector3 vel = rb.velocity;
         
-        text_obj.transform.position = transform.position + text_offset;
-        text_obj.transform.rotation = Quaternion.identity;
+        //text_obj.transform.position = transform.position + text_offset;
+        ////text_obj.transform.rotation = Quaternion.identity;
 
         if ( index_rofl >= prev_velocities_kept )
         {   //print("EXECUTING COPY!");
@@ -103,14 +104,14 @@ public class Item : MonoBehaviour
 
         if ( p_state == pickup_state.active )
         {
-            text_obj.SetActive(true);
-            text_obj.transform.rotation = Quaternion.LookRotation(text_obj.transform.position - player.transform.position);
+            //text_obj.SetActive(true);
+            //text_obj.transform.rotation = Quaternion.LookRotation(//text_obj.transform.position - player.transform.position);
             
             if(Input.GetKeyDown(KeyCode.F))
             {
                 print(" ay pick it up lmao ");
-                text_obj.SetActive(false);
-                print("text_obj.setActive = " + text_obj.activeSelf);
+                //text_obj.SetActive(false);
+                //print("//text_obj.setActive = " + //text_obj.activeSelf);
                 player_pickup.addToInventory(gameObject, name_);
                 //gameObject.SetActive(false);
             }
@@ -119,7 +120,7 @@ public class Item : MonoBehaviour
 
         else if ( p_state == pickup_state.inactive )
         {
-            text_obj.SetActive(false);
+            //text_obj.SetActive(false);
         }
 
     }
@@ -178,7 +179,7 @@ public class Item : MonoBehaviour
                 //audio_src_.PlayOneShot(crash_sound_);
                 AudioSource.PlayClipAtPoint(crash_sound_, transform.position, play_volume);
             }
-            text_obj.SetActive(true);
+            //text_obj.SetActive(true);
 
             // check to see if any guards heard the object
             GameObject[] guards = GameObject.FindGameObjectsWithTag("Guard");

@@ -76,7 +76,7 @@ public class Throw : MonoBehaviour
                 player_pickup.Inventory_items[item_index].SetActive(true);
 
                 holdObjectToThrow(player_pickup.Inventory_items[item_index]);
-                held_item_.transform.GetChild(0).gameObject.SetActive(false);
+                //held_item_.transform.GetChild(0).gameObject.SetActive(false);
 
                 throw_power = default_throw_power;
                 throw_angle = Vector3.Angle(transform.forward, new Vector3(transform.forward.x, 0, transform.forward.z));
@@ -102,11 +102,11 @@ public class Throw : MonoBehaviour
                 throw_arc.enabled = true;
 
             //print(player_pickup.Inventory_items[0].activeSelf);
-            GameObject textOBJ = held_item_.transform.GetChild(0).gameObject;
+            //GameObject textOBJ = held_item_.transform.GetChild(0).gameObject;
             //print("setting the text object inactive");
-            TextMesh tm = textOBJ.GetComponent<TextMesh>();
+            //TextMesh tm = textOBJ.GetComponent<TextMesh>();
             //print("this is a text mesh i promise --> " + tm.text);
-            textOBJ.SetActive(false);
+            //textOBJ.SetActive(false);
 
             //  1. Get the inputs! (ScrollWheel and Mouse Y)
             float mouse_y = Input.GetAxis("Mouse Y");
@@ -302,7 +302,7 @@ public class Throw : MonoBehaviour
             {
                 obj.SetActive(true);
                 //print("inside changeObjectHolding setting active to false");
-                obj.transform.GetChild(0).gameObject.SetActive(false);
+                //obj.transform.GetChild(0).gameObject.SetActive(false);
             }
 
             holdObjectToThrow(obj);
