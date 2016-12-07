@@ -110,6 +110,7 @@ public class Item : MonoBehaviour
             {
                 print(" ay pick it up lmao ");
                 text_obj.SetActive(false);
+                print("text_obj.setActive = " + text_obj.activeSelf);
                 player_pickup.addToInventory(gameObject, name_);
                 //gameObject.SetActive(false);
             }
@@ -212,8 +213,12 @@ public class Item : MonoBehaviour
             //player_pickup.addToInventory(gameObject, name_);
             if(previous_velocities[0].magnitude < 2f)
             {
-                print("set active because of this collision");
-                p_state = pickup_state.active;
+                
+                if(transform.parent != player.transform)
+                {
+                    print("set active because of this collision");
+                    p_state = pickup_state.active;
+                }
 
             }
         }

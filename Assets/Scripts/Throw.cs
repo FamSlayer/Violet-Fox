@@ -57,11 +57,13 @@ public class Throw : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        offset = gameObject.transform.position + gameObject.transform.forward + gameObject.transform.right / 2f + gameObject.transform.up * 3f; // fake position, we'll change this ???
+        offset = gameObject.transform.position + gameObject.transform.forward*3f + gameObject.transform.right / 2f + gameObject.transform.up * 3f; // fake position, we'll change this ???
         //print("In Throw.cs: " + player_pickup.Inventory_items.Count);
 
         if( player_pickup.Inventory_items.Count != 0 )
         {
+            //print(player_pickup.Inventory_items.Count);
+            
             if (Input.GetMouseButtonDown(1) && player_pickup.Inventory_items.Count != 0)
             {
                 //print("In Throw.cs: ok trying to hold an item now when inventory.count = " + player_pickup.Inventory_items.Count);
@@ -74,6 +76,8 @@ public class Throw : MonoBehaviour
                 player_pickup.Inventory_items[item_index].SetActive(true);
 
                 holdObjectToThrow(player_pickup.Inventory_items[item_index]);
+                held_item_.transform.GetChild(0).gameObject.SetActive(false);
+
                 throw_power = default_throw_power;
                 throw_angle = Vector3.Angle(transform.forward, new Vector3(transform.forward.x, 0, transform.forward.z));
                 if (transform.forward.y < 0)
@@ -97,11 +101,12 @@ public class Throw : MonoBehaviour
             if (!throw_arc.isVisible)
                 throw_arc.enabled = true;
 
+            //print(player_pickup.Inventory_items[0].activeSelf);
             GameObject textOBJ = held_item_.transform.GetChild(0).gameObject;
             //print("setting the text object inactive");
             TextMesh tm = textOBJ.GetComponent<TextMesh>();
-            print("this is a text mesh i promise --> " + tm.text);
-            //textOBJ.SetActive(false);
+            //print("this is a text mesh i promise --> " + tm.text);
+            textOBJ.SetActive(false);
 
             //  1. Get the inputs! (ScrollWheel and Mouse Y)
             float mouse_y = Input.GetAxis("Mouse Y");
@@ -171,7 +176,7 @@ public class Throw : MonoBehaviour
         rb.useGravity = false;
         rb.detectCollisions = false;
 
-        obj.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
+        //obj.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
         //  5. Set the new game object to the player's held_item_ member variable
         held_item_ = obj;
     }
@@ -297,7 +302,7 @@ public class Throw : MonoBehaviour
             {
                 obj.SetActive(true);
                 //print("inside changeObjectHolding setting active to false");
-                //obj.transform.GetChild(0).gameObject.SetActive(false);
+                obj.transform.GetChild(0).gameObject.SetActive(false);
             }
 
             holdObjectToThrow(obj);
