@@ -50,6 +50,7 @@ public class Item : MonoBehaviour
 
     void Start ()
     {
+        prev_velocities_kept = 2;
         previous_velocities = new Vector3[prev_velocities_kept];
         audio_src_ = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
