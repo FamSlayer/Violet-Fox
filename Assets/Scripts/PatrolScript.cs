@@ -73,10 +73,9 @@ public class PatrolScript : MonoBehaviour {
         Vector3 direction = toPosition - fromPosition;
         //Vector3 direction = transform.TransformDirection(Vector3.forward);
         float angle = Vector3.Angle(transform.forward, player.transform.position);
-        if (angle > 60)
+        if (angle < 60)
         {
             RaycastHit hit;
-            ;
             if(Physics.Raycast(transform.position, direction, out hit, visionDistance))
             {
                 if (hit.collider.tag == "Player")
