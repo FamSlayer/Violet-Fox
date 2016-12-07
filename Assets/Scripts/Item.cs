@@ -14,7 +14,7 @@ public class Item : MonoBehaviour
     public string name_;
     public Vector3 text_offset;
     public float default_sound_volume_;
-    public int vol_dist_scalar = 200;
+    public int vol_dist_scalar = 800;
     public int prev_velocities_kept = 2;
     Vector3[] previous_velocities;
     int index_rofl = 0;
@@ -186,7 +186,7 @@ public class Item : MonoBehaviour
             for(int i=0; i<guards.Length; i++)
             {
                 float distance = Vector3.Distance(guards[i].transform.position, transform.position);
-                if( vol_dist_scalar * play_volume < 75 )
+                if( vol_dist_scalar * play_volume / distance > 1 )
                 {
                     PatrolScript ps = guards[i].GetComponent<PatrolScript>();
                     ps.Investigate(transform);
