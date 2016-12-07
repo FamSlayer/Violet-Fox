@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PatrolScript : MonoBehaviour {
 
@@ -81,7 +82,7 @@ public class PatrolScript : MonoBehaviour {
                 if (hit.collider.tag == "Player")
                 {
                     //Idk do game over stuff
-                    print("You got caught asshole");
+                    SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
                 }
             }
             
