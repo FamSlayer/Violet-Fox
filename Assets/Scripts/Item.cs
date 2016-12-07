@@ -158,12 +158,12 @@ public class Item : MonoBehaviour
             if (sliding)
             {
                 print("item is sliding");
-                audio_src_.PlayOneShot(drag_sound_);
+                //audio_src_.PlayOneShot(drag_sound_);
                 AudioSource.PlayClipAtPoint(drag_sound_, transform.position, play_volume);
             }
             else
             {
-                audio_src_.PlayOneShot(crash_sound_);
+                //audio_src_.PlayOneShot(crash_sound_);
                 AudioSource.PlayClipAtPoint(crash_sound_, transform.position, play_volume);
             }
         }

@@ -21,10 +21,10 @@ public class UIWheelController : MonoBehaviour {
     public List<Sprite> icon_sprites;
     public Dictionary<string, Sprite> icon_map;
 
-    public PickUp player_pickup;
-    public List<string> Inventory_n;
-    public List<GameObject> Inventory_i;
-    public int selected = 0;
+    PickUp player_pickup;
+    List<string> Inventory_n;
+    List<GameObject> Inventory_i;
+    int selected = 0;
 
     GameObject player;
     List<GameObject> children;
