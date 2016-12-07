@@ -62,6 +62,7 @@ public class Item : MonoBehaviour
         text_offset = new Vector3(0f, 0.5f, 0f);
 
         GameObject text_obj = new GameObject();
+        text_obj.AddComponent<TextMesh>();
         TextMesh t_mesh = text_obj.GetComponent<TextMesh>();
         t_mesh.characterSize = 1;
         t_mesh.anchor = UnityEngine.TextAnchor.MiddleCenter;
