@@ -4,8 +4,11 @@ using System.Collections;
 public class PatrolScript : MonoBehaviour {
 
     public Transform[] points;
+    public GameObject player;
+    public int visionDistance;
     private int destPoint = 0;
     private NavMeshAgent agent;
+    private Transform investipoint;
 
 
     void Start()
@@ -23,6 +26,10 @@ public class PatrolScript : MonoBehaviour {
 
     void GotoNextPoint()
     {
+        if(investipoint)
+        {
+            agent.destination = investipoint.position;
+        }
 
         // Returns if no points have been set up
         if (points.Length == 0)
@@ -36,12 +43,41 @@ public class PatrolScript : MonoBehaviour {
         destPoint = (destPoint + 1) % points.Length;
     }
 
+    void Investigate(Transform duck)
+    {
+        investipoint = duck;
+        GotoNextPoint();
+    }
+
 
     void Update()
     {
         // Choose the next destination point when the agent gets
         // close to the current one.
         if (agent.remainingDistance < 1.5f)
+            if(investipoint)
+            {
+                investipoint = null;
+                GotoNextPoint();
+            }
             GotoNextPoint();
+    }
+    private void FixedUpdate()
+    {
+        Vector3 fromPosition = this.transform.position;
+        Vector3 toPosition = player.transform.position;
+        Vector3 direction = toPosition - fromPosition;
+        //Vector3 direction = transform.TransformDirection(Vector3.forward);
+        float angle = Vector3.Angle(transform.forward, player.transform.position);
+        if (angle > 60)
+        {
+            RaycastHit hit;
+            Physics.Raycast(transform.position, direction, out hit, visionDistance);
+            if(hit.collider.tag == "Player")
+            {
+                //Idk do game over stuff
+                print("You got caught asshole");
+            }
+        }
     }
 }
