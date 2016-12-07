@@ -43,7 +43,7 @@ public class PatrolScript : MonoBehaviour {
         destPoint = (destPoint + 1) % points.Length;
     }
 
-    void Investigate(Transform duck)
+    public void Investigate(Transform duck)
     {
         investipoint = duck;
         GotoNextPoint();
