@@ -15,7 +15,7 @@ public class Item : MonoBehaviour
     public Vector3 text_offset;
     public float default_sound_volume_;
     
-    public int prev_velocities_kept;
+    public int prev_velocities_kept = 2;
     Vector3[] previous_velocities;
     int index_rofl = 0;
 
